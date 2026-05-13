@@ -1,33 +1,35 @@
+# This docker-compose.yml is for development purposes only such as creating a local AIP build during testing
+# Actual Github workflows directly uses FEMR/femr docker-compose.yml along with ./docker-compose.override.yml
+# KEEP THIS COMMENT!!!
+
+#copied from FEMR/femr/docker-compose.yml on 5/13/2025 wth adjustment to femr service image origin
+version: "3"
 services:
+
   db:
-    platform: linux/amd64
     image: mysql:9.1.0
     restart: always
     environment:
-      MYSQL_DATABASE: "femr_db"
-      MYSQL_USER: "femr"
-      MYSQL_PASSWORD: "password"
-      MYSQL_RANDOM_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: 'femr_db'
+      MYSQL_USER: 'femr'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
     ports:
-      - "3306:3306"
-    command:
-      - "--log-bin-trust-function-creators=1"
+      - '3306:3306'
     expose:
-      - "3306"
+      - '3306'
+    command:
+      - "mysqld"
+      - "--log-bin-trust-function-creators=1"
     volumes:
       - db-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
-      interval: 30s
-      retries: 3
-      start_period: 10s
-      timeout: 5s
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
 
   femr:
-    platform: linux/amd64
-    image: teamfemrdev/teamfemr:latest
-    links:
-      - db:mysql
+    build: .
     depends_on: 
       db:
         condition: service_healthy
@@ -35,8 +37,6 @@ services:
     restart: on-failure:10
     ports:
       - '9000:9000'
-    expose:
-      - "9000"
 
     environment:
       DB_URL: 'jdbc:mysql://db:3306/femr_db?characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true'
@@ -45,7 +45,11 @@ services:
       IS_DOCKER: 'true'
 
     volumes:
-      - ./femr/conf:/usr/src/app/conf
+      - ./speedtest:/usr/src/speedtest
 
+
+#needs to be manually created; better to run .ps1 which inculdes complete installation script
 volumes:
   db-data:
+    external: true  
+    name: femr-ext-volume

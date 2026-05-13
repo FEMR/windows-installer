@@ -1,0 +1,4 @@
+services:
+  femr:
+    image: teamfemrdev/teamfemr:latest
+    build: null 
