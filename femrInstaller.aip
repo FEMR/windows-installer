@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="20.2.1" version="23.5.1" PreviousModules="professional" Modules="enterprise" RootPath="." Language="en" Id="{56DBCB2A-B73F-4BCB-AE84-6587F5A2ECE4}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="20.2.1" version="23.6" PreviousModules="professional" Modules="enterprise" RootPath="." Language="en" Id="{56DBCB2A-B73F-4BCB-AE84-6587F5A2ECE4}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
     <ROW Name="HiddenItems" Value="ActSyncAppComponent;CPLAppletComponent;AutorunComponent;GameUxComponent;SilverlightSlnComponent;SharePointSlnComponent"/>
   </COMPONENT>
@@ -20,7 +20,6 @@
     <ROW Property="ARPNOREMOVE" Value="1"/>
     <ROW Property="ARPNOREPAIR" Value="1" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="ARPSYSTEMCOMPONENT" Value="1"/>
-    <ROW Property="AUTH_OK" Value="undefined"/>
     <ROW Property="Manufacturer" Value="Team fEMR"/>
     <ROW Property="ProductCode" Value="1033:{8C06D909-46E4-4D4C-8A1F-C66A1CDDCCDE} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
@@ -41,7 +40,6 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
-    <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
     <ROW Directory="ProgramMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="PROGRA~1|ProgramMenuFolder" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
   </COMPONENT>
@@ -50,19 +48,16 @@
     <ROW Component="AI_ExePath" ComponentId="{5FB74C88-029C-48EC-A68D-8209E357D403}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
     <ROW Component="APPDIR" ComponentId="{095E722A-8AD6-4DBB-8FBE-B9B183829A52}" Directory_="APPDIR" Attributes="0"/>
     <ROW Component="ProductInformation" ComponentId="{F7D90F57-1536-4DFD-8D48-18FA396745BB}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="dockercompose.yml" ComponentId="{EE4968A2-9F23-44C1-8C36-96586C722256}" Directory_="APPDIR" Attributes="0" KeyPath="Dockerfile" Type="0"/>
-    <ROW Component="femr.exe" ComponentId="{5ADA4652-87C4-4E25-8987-C60F17B38276}" Directory_="APPDIR" Attributes="0" KeyPath="femr.exe"/>
+    <ROW Component="dockercompose.yml" ComponentId="{EE4968A2-9F23-44C1-8C36-96586C722256}" Directory_="APPDIR" Attributes="0" KeyPath="femr.ps1" Type="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
-    <ROW File="Dockerfile" Component_="dockercompose.yml" FileName="DOCKER~1|Dockerfile" Attributes="0" SourcePath="Dockerfile" SelfReg="false"/>
     <ROW File="femr.ps1" Component_="dockercompose.yml" FileName="femr.ps1" Attributes="0" SourcePath="femr.ps1" SelfReg="false"/>
     <ROW File="dockercompose.yml" Component_="dockercompose.yml" FileName="DOCKER~1.YML|docker-compose.yml" Attributes="0" SourcePath="docker-compose.yml" SelfReg="false"/>
     <ROW File="README.html" Component_="dockercompose.yml" FileName="README~1.HTM|README.html" Attributes="0" SourcePath="README.html" SelfReg="false"/>
-    <ROW File="femr.exe" Component_="femr.exe" FileName="femr.exe" Attributes="0" SourcePath="femr.exe" SelfReg="false" DigSign="true"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -89,7 +84,6 @@
     <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
     <ROW Fragment="InstallDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\InstallDlg.aip"/>
     <ROW Fragment="LicenseAgreementDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\LicenseAgreementDlg.aip"/>
-    <ROW Fragment="LogonInformationDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\LogonInformationDlg.aip"/>
     <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\MaintenanceTypeDlg.aip"/>
     <ROW Fragment="MessageDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\MessageDlg.aip"/>
     <ROW Fragment="PreparePrereqDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\PreparePrereqDlg.aip"/>
@@ -106,14 +100,18 @@
     <ROW Fragment="WelcomePrereqDlg.aip" Path="&lt;AI_THEMES&gt;surface\fragments\WelcomePrereqDlg.aip"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiActionTextComponent">
+    <ROW Action="AI_ConfigureChainer" Description="Configuring prerequisites launcher" DescriptionLocId="ActionText.Description.AI_ConfigureChainer" Template="Configure Launcher" TemplateLocId="ActionText.Template.AI_ConfigureChainer"/>
     <ROW Action="AI_DeleteLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
     <ROW Action="AI_DeleteRLzma" Description="Deleting files extracted from archive" DescriptionLocId="ActionText.Description.AI_DeleteLzma" TemplateLocId="-"/>
     <ROW Action="AI_DownloadPrereq" Description="Downloading prerequisite software" DescriptionLocId="ActionText.Description.AI_DownloadPrereq" Template="[1]" TemplateLocId="ActionText.Template.AI_DownloadPrereq"/>
     <ROW Action="AI_ExtractFiles" Description="Extracting files from archive" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
     <ROW Action="AI_ExtractLzma" Description="Extracting files from archive" DescriptionLocId="ActionText.Description.AI_ExtractLzma" TemplateLocId="-"/>
     <ROW Action="AI_ExtractPrereq" Description="Extracting prerequisite software" DescriptionLocId="ActionText.Description.AI_ExtractPrereq" Template="[1]" TemplateLocId="ActionText.Template.AI_ExtractPrereq"/>
+    <ROW Action="AI_InstallPostPrerequisite" Description="Configuring prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="[1]" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
     <ROW Action="AI_InstallPrePrerequisite" Description="Configuring prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="[1]" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
+    <ROW Action="AI_InstallPrerequisite" Description="Configuring prerequisite software" DescriptionLocId="ActionText.Description.AI_InstallPrerequisite" Template="[1]" TemplateLocId="ActionText.Template.AI_InstallPrerequisite"/>
     <ROW Action="AI_VerifyPrePrereq" Description="Verifying prerequisites" DescriptionLocId="ActionText.Description.AI_VerifyPrereq" Template="[1] was not installed correctly." TemplateLocId="ActionText.Template.AI_VerifyPrereq"/>
+    <ROW Action="AI_VerifyPrereq" Description="Verifying prerequisites" DescriptionLocId="ActionText.Description.AI_VerifyPrereq" Template="[1] was not installed correctly." TemplateLocId="ActionText.Template.AI_VerifyPrereq"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiAppSearchComponent">
     <ROW Property="AI_SETUPEXEPATH" Signature_="AI_EXE_PATH_LM" Builds="DefaultBuild"/>
@@ -124,6 +122,8 @@
     <ROW Name="ShortcutFlags.dll" SourcePath="&lt;AI_CUSTACTS&gt;ShortcutFlags.dll"/>
     <ROW Name="SoftwareDetector.dll" SourcePath="&lt;AI_CUSTACTS&gt;SoftwareDetector.dll"/>
     <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+    <ROW Name="aipackagechainer.exe" SourcePath="&lt;AI_CUSTACTS&gt;aipackagechainer.exe" DigSign="true"/>
+    <ROW Name="file_deleter.ps1" SourcePath="&lt;AI_SCRIPTS&gt;file_deleter.ps1"/>
     <ROW Name="lzmaextractor.dll" SourcePath="&lt;AI_CUSTACTS&gt;lzmaextractor.dll"/>
     <ROW Name="viewer.exe" SourcePath="&lt;AI_CUSTACTS&gt;viewer.exe" DigSign="true"/>
   </COMPONENT>
@@ -142,13 +142,6 @@
     <ROW Dialog_="InstallDlg" Control="ProductNameTitle" Type="Text" X="83" Y="21" Width="250" Height="43" Attributes="196611" Text="[ProductName]" TextStyle="[ProductNameForSplash]" Order="1200" TextLocId="Metro.Control.Text.ProductName" MsiKey="InstallDlg#ProductNameTitle"/>
     <ROW Dialog_="InstallDlg" Control="ScrollableText_1" Type="ScrollableText" X="17" Y="166" Width="315" Height="125" Attributes="3" Property="SCROLLABLETEXT_1_PROP" Text="FEMR_EULA.rtf" Order="1500"/>
     <ROW Dialog_="LicenseAgreementDlg" Control="ProductNameTitle" Type="Text" X="83" Y="21" Width="250" Height="43" Attributes="196611" Text="[ProductName]" TextStyle="[ProductNameForSplash]" Order="700" TextLocId="Metro.Control.Text.ProductName" MsiKey="LicenseAgreementDlg#ProductNameTitle"/>
-    <ROW Dialog_="LogonInformationDlg" Control="LogonInformationDlgDialogInitializer" Type="DialogInitializer" X="0" Y="0" Width="0" Height="0" Attributes="0" Order="-1" TextLocId="-" HelpLocId="-" ExtDataLocId="-"/>
-    <ROW Dialog_="LogonInformationDlg" Control="Cancel" Type="ImageButton" X="163" Y="359" Width="78" Height="28" Attributes="2" Text="[NextCancelButtons]" TextStyle="[MetroButtonText]" Order="100" MsiKey="LogonInformationDlg#Cancel" Options="1" ExtType="ImageButton" ExtData="[ButtonText_Cancel]" ExtDataLocId="-"/>
-    <ROW Dialog_="LogonInformationDlg" Control="CompanyText" Type="Text" X="83" Y="16" Width="249" Height="12" Attributes="196611" Text="[Manufacturer]" TextStyle="[ManufacturerFont]" Order="900" TextLocId="Metro.Control.Text.Manufacturer" MsiKey="LogonInformationDlg#CompanyText"/>
-    <ROW Dialog_="LogonInformationDlg" Control="ProductLogo" Type="Bitmap" X="17" Y="5" Width="59" Height="63" Attributes="1" Text="[AppLogoIcon]" Order="1000" MsiKey="LogonInformationDlg#ProductLogo"/>
-    <ROW Dialog_="LogonInformationDlg" Control="PasswordLabel" Type="Text" X="17" Y="173" Width="312" Height="15" Attributes="65539" Text="&amp;Password:" Order="1100" TextLocId="Control.Text.LogonInformationDlg#PasswordLabel" MsiKey="LogonInformationDlg#PasswordLabel"/>
-    <ROW Dialog_="LogonInformationDlg" Control="PassworEdit" Type="Edit" X="17" Y="190" Width="312" Height="18" Attributes="2097155" Property="USER_PASSWORD" Text="{80}" Order="1200" TextLocId="Control.Text.LogonInformationDlg#PasswordEdit" MsiKey="LogonInformationDlg#PassworEdit"/>
-    <ROW Dialog_="LogonInformationDlg" Control="AdvInst" Type="Text" X="5" Y="388" Width="74" Height="11" Attributes="196611" Text="Advanced Installer" TextStyle="[BrandingStyle]" Order="1300" MsiKey="LogonInformationDlg#AdvInst"/>
     <ROW Dialog_="MaintenanceTypeDlg" Control="ProductNameTitle" Type="Text" X="83" Y="21" Width="250" Height="43" Attributes="196611" Text="[ProductName]" TextStyle="[ProductNameForSplash]" Order="1400" TextLocId="Metro.Control.Text.ProductName" MsiKey="MaintenanceTypeDlg#ProductNameTitle"/>
     <ROW Dialog_="MessageDlg" Control="TryAgain" Type="ImageButton" X="250" Y="110" Width="78" Height="28" Attributes="2" Text="[metrobuttonimage]" TextStyle="[MetroButtonText]" Order="200" MsiKey="MessageDlg#TryAgain" ExtType="ImageButton" ExtData="[ButtonText_TryAgain]" ExtDataLocId="-"/>
     <ROW Dialog_="MessageDlg" Control="Yes" Type="ImageButton" X="250" Y="110" Width="78" Height="28" Attributes="2" Text="[metrobuttonimage]" TextStyle="[MetroButtonText]" Order="400" MsiKey="MessageDlg#Yes" ExtType="ImageButton" ExtData="[ButtonText_Yes]" ExtDataLocId="-"/>
@@ -231,7 +224,6 @@
     <ROW Dialog_="WelcomePrereqDlg" Control="ProductNameTitle" Type="Text" X="83" Y="21" Width="250" Height="43" Attributes="196611" Text="[ProductName]" TextStyle="[ProductNameForSplash]" Order="500" TextLocId="Metro.Control.Text.ProductName" MsiKey="WelcomePrereqDlg#ProductNameTitle"/>
     <ROW Dialog_="WelcomePrereqDlg" Control="Description" Type="Text" X="17" Y="139" Width="312" Height="211" Attributes="196611" Text="The setup has determined that some of the prerequisites needed to run [ProductName] are missing. This wizard will assist you in getting and installing those prerequisites. Click &quot;[Text_Next]&quot; to continue or &quot;[ButtonText_Cancel]&quot; to exit the [Wizard]." Order="800" TextLocId="Control.Text.WelcomePrereqDlg#Description" MsiKey="WelcomePrereqDlg#Description"/>
     <ROW Dialog_="WelcomePrereqDlg" Control="SubTitle" Type="Text" X="17" Y="105" Width="312" Height="34" Attributes="196611" Text="Welcome to the Prerequisites [Wizard]" TextStyle="[SubTitleStyle]" Order="900" TextLocId="Control.Text.WelcomePrereqDlg#SubTitle" MsiKey="WelcomePrereqDlg#SubTitle"/>
-    <ATTRIBUTE name="DeletedRows" value="LogonInformationDlg#DomainEdit@LogonInformationDlg#DomainLabel"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlConditionComponent">
     <ROW Dialog_="ExitDialog" Control_="Text_1" Action="Show" Condition="NOT REMOVE=&quot;ALL&quot;"/>
@@ -241,10 +233,10 @@
     <ROW Dialog_="WelcomePrereqDlg" Control_="Next" Event="NewDialog" Argument="NewDialog" Condition="AI_BOOTSTRAPPER" Ordering="1"/>
     <ROW Dialog_="PrerequisitesDlg" Control_="Next" Event="EndDialog" Argument="Return" Condition="AI_BOOTSTRAPPER" Ordering="1"/>
     <ROW Dialog_="PrerequisitesDlg" Control_="Back" Event="NewDialog" Argument="NewDialog" Condition="AI_BOOTSTRAPPER" Ordering="1"/>
-    <ROW Dialog_="InstallDlg" Control_="Next" Event="NewDialog" Argument="LogonInformationDlg" Condition="AI_INSTALL" Ordering="301"/>
+    <ROW Dialog_="InstallDlg" Control_="Next" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="305"/>
     <ROW Dialog_="InstallDlg" Control_="YouMustAgreeCtrl" Event="NewDialog" Argument="LicenseAgreementDlg" Condition="AI_INSTALL AND AiLicenseAgreement" Ordering="301"/>
     <ROW Dialog_="LicenseAgreementDlg" Control_="Back" Event="NewDialog" Argument="InstallDlg" Condition="AI_INSTALL AND AiLicenseAgreement" Ordering="1"/>
-    <ROW Dialog_="LicenseAgreementDlg" Control_="Next" Event="NewDialog" Argument="LogonInformationDlg" Condition="AI_INSTALL AND AiLicenseAgreement" Ordering="101"/>
+    <ROW Dialog_="LicenseAgreementDlg" Control_="Next" Event="EndDialog" Argument="Return" Condition="AI_INSTALL AND AiLicenseAgreement" Ordering="105"/>
     <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
     <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="699"/>
     <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
@@ -306,19 +298,10 @@
     <ROW Dialog_="LicenseAgreementDlg" Control_="LicenseAgreementDlgDialogInitializer" Event="[Text_Next]" Argument="[Text_Install]" Condition="AI_INSTALL AND AiLicenseAgreement" Ordering="104" Options="2"/>
     <ROW Dialog_="LicenseAgreementDlg" Control_="Back" Event="[ButtonText_Next]" Argument="[AI_ButtonText_Next_Orig]" Condition="AI_INSTALL AND AiLicenseAgreement" Ordering="2" Options="2"/>
     <ROW Dialog_="LicenseAgreementDlg" Control_="Back" Event="[Text_Next]" Argument="[AI_Text_Next_Orig]" Condition="AI_INSTALL AND AiLicenseAgreement" Ordering="3" Options="2"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="Next" Event="EndDialog" Argument="Return" Condition="AI_INSTALL AND ( AUTH_OK=&quot;valid&quot; )" Ordering="1"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="Back" Event="NewDialog" Argument="InstallDlg" Condition="AI_INSTALL" Ordering="1"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="Back" Event="NewDialog" Argument="LicenseAgreementDlg" Condition="AI_INSTALL AND AiLicenseAgreement" Ordering="2"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="Next" Event="DoAction" Argument="LoginScript" Condition="AI_INSTALL" Ordering="3"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="Next" Event="DoAction" Argument="AI_DATA_SETTER_1" Condition="AI_INSTALL" Ordering="2"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="Next" Event="DoAction" Argument="MessageBox" Condition="AI_INSTALL AND ( AUTH_OK = &quot;invalid&quot; )" Ordering="5"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="Next" Event="DoAction" Argument="AI_DATA_SETTER_2" Condition="AI_INSTALL AND ( AUTH_OK = &quot;invalid&quot; )" Ordering="4"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="LogonInformationDlgDialogInitializer" Event="[AI_ButtonText_Next_Orig]" Argument="[ButtonText_Next]" Condition="AI_INSTALL" Ordering="0" Options="2"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="LogonInformationDlgDialogInitializer" Event="[ButtonText_Next]" Argument="[[AI_CommitButton]]" Condition="AI_INSTALL" Ordering="1" Options="2"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="LogonInformationDlgDialogInitializer" Event="[AI_Text_Next_Orig]" Argument="[Text_Next]" Condition="AI_INSTALL" Ordering="2" Options="2"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="LogonInformationDlgDialogInitializer" Event="[Text_Next]" Argument="[Text_Install]" Condition="AI_INSTALL" Ordering="3" Options="2"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="Back" Event="[ButtonText_Next]" Argument="[AI_ButtonText_Next_Orig]" Condition="AI_INSTALL" Ordering="3" Options="2"/>
-    <ROW Dialog_="LogonInformationDlg" Control_="Back" Event="[Text_Next]" Argument="[AI_Text_Next_Orig]" Condition="AI_INSTALL" Ordering="4" Options="2"/>
+    <ROW Dialog_="FatalError" Control_="Finish" Event="DoAction" Argument="AI_RollbackPrereq" Condition="1" Ordering="203"/>
+    <ROW Dialog_="ExitDialog" Control_="Finish" Event="DoAction" Argument="AI_CleanPrereq" Condition="1" Ordering="103"/>
+    <ROW Dialog_="FatalError" Control_="Finish" Event="DoAction" Argument="AI_CleanPrereq" Condition="1" Ordering="204"/>
+    <ROW Dialog_="UserExit" Control_="Finish" Event="DoAction" Argument="AI_CleanPrereq" Condition="1" Ordering="102"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
@@ -329,10 +312,9 @@
     <ROW Action="AI_BACKUP_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH_ORIGINAL" Target="[AI_SETUPEXEPATH]"/>
     <ROW Action="AI_ChooseTextStyles" Type="1" Source="aicustact.dll" Target="ChooseTextStyles"/>
     <ROW Action="AI_CleanPrePrereq" Type="65" Source="Prereq.dll" Target="CleanPrereq" WithoutSeq="true"/>
+    <ROW Action="AI_CleanPrereq" Type="65" Source="Prereq.dll" Target="CleanPrereq" WithoutSeq="true"/>
+    <ROW Action="AI_ConfigureChainer" Type="1" Source="Prereq.dll" Target="ConfigurePrereqLauncher"/>
     <ROW Action="AI_DATA_SETTER" Type="51" Source="CustomActionData" Target="[AI_SETUPEXEPATH]"/>
-    <ROW Action="AI_DATA_SETTER_1" Type="51" Source="CustomActionData"/>
-    <ROW Action="AI_DATA_SETTER_2" Type="51" Source="CustomActionData" Target="Invalid Credentials. Please enter valid credentials. |Invalid Credentials |MB_OK,MB_ICONINFORMATION,MB_DEFBUTTON1|BTN_PRESSED|[CLIENTPROCESSID]"/>
-    <ROW Action="AI_DATA_SETTER_3" Type="51" Source="CustomActionData" Target="AI_USER_CHECK_PASSWORD&#127;[AI_USER_CHECK_PASSWORD]&#1;AI_USER_IGNORE_FULLNAME&#127;[AI_USER_IGNORE_FULLNAME]&#1;AI_USER_IGNORE_MSI&#127;[AI_USER_IGNORE_MSI]&#1;AI_USER_IS_GROUP&#127;[AI_USER_IS_GROUP]&#1;DOMAIN_NAME&#127;[DOMAIN_NAME]&#1;USER_NAME&#127;[USER_NAME]&#1;USER_PASSWORD&#127;[USER_PASSWORD]"/>
     <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
     <ROW Action="AI_DeleteCadLzma" Type="51" Source="AI_DeleteLzma" Target="[AI_SETUPEXEPATH]"/>
     <ROW Action="AI_DeleteLzma" Type="1025" Source="lzmaextractor.dll" Target="DeleteLZMAFiles"/>
@@ -349,7 +331,11 @@
     <ROW Action="AI_FindExeLzma" Type="1" Source="lzmaextractor.dll" Target="FindEXE"/>
     <ROW Action="AI_GetArpIconPath" Type="1" Source="aicustact.dll" Target="GetArpIconPath"/>
     <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_InstallPostPrerequisite" Type="1" Source="Prereq.dll" Target="InstallPostPrereq"/>
     <ROW Action="AI_InstallPrePrerequisite" Type="65" Source="Prereq.dll" Target="InstallPrePrereq"/>
+    <ROW Action="AI_InstallPrerequisite" Type="1" Source="Prereq.dll" Target="InstallPrereq"/>
+    <ROW Action="AI_LaunchChainer" Type="3314" Source="AI_PREREQ_CHAINER"/>
+    <ROW Action="AI_MigrateInstallerProps" Type="1" Source="aicustact.dll" Target="MigrateInstallerProps"/>
     <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
     <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
     <ROW Action="AI_PinShortcuts" Type="1" Source="ShortcutFlags.dll" Target="PinShortcuts"/>
@@ -359,7 +345,10 @@
     <ROW Action="AI_RESTORE_AI_SETUPEXEPATH" Type="51" Source="AI_SETUPEXEPATH" Target="[AI_SETUPEXEPATH_ORIGINAL]"/>
     <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
     <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_ResolvePropertyBaseFolder" Type="1" Source="aicustact.dll" Target="ResolvePropertyBaseFolder" WithoutSeq="true"/>
+    <ROW Action="AI_RestoreInstallerProps" Type="1" Source="aicustact.dll" Target="RestoreInstallerProps" WithoutSeq="true"/>
     <ROW Action="AI_RollbackPrePrereq" Type="65" Source="Prereq.dll" Target="RollbackPrePrereq" WithoutSeq="true"/>
+    <ROW Action="AI_RollbackPrereq" Type="65" Source="Prereq.dll" Target="RollbackPrereq" WithoutSeq="true"/>
     <ROW Action="AI_RunFinishActions" Type="1" Source="aicustact.dll" Target="RunFinishActions" WithoutSeq="true"/>
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
@@ -367,10 +356,8 @@
     <ROW Action="AI_UnpinFromTaskbar" Type="1025" Source="ShortcutFlags.dll" Target="UnpinFromTaskbar" WithoutSeq="true"/>
     <ROW Action="AI_UnpinShortcuts" Type="1" Source="ShortcutFlags.dll" Target="UnpinShortcuts"/>
     <ROW Action="AI_VerifyPrePrereq" Type="1" Source="Prereq.dll" Target="VerifyPrePrereq"/>
-    <ROW Action="CheckIfUserExists" Type="1" Source="aicustact.dll" Target="CheckIfUserExists" Options="1" AdditionalSeq="AI_DATA_SETTER_3"/>
+    <ROW Action="AI_VerifyPrereq" Type="1" Source="Prereq.dll" Target="VerifyPrereq"/>
     <ROW Action="LaunchFile" Type="2" Source="viewer.exe" Target="/dir &quot;[APPDIR]&quot; &quot;[APPDIR]README.html&quot;" WithoutSeq="true" Options="1"/>
-    <ROW Action="LoginScript" Type="37" Target="///////////////////////////////////////////////////////////////////////////////&#13;&#10;// Advanced Installer – Execute inline script code (JScript)                 //&#13;&#10;///////////////////////////////////////////////////////////////////////////////&#13;&#10;&#13;&#10;// 1. Read the values the user typed in the dialog&#13;&#10;var user = Session.Property(&quot;USER_NAME&quot;);     // e.g. &quot;email@example.com&quot;&#13;&#10;var pass = Session.Property(&quot;USER_PASSWORD&quot;);     // plain-text password&#13;&#10;&#13;&#10;// 2. Build the JSON payload – keep it minimal to avoid quoting issues&#13;&#10;var payload = &apos;{&quot;email&quot;:&quot;&apos; + user.replace(/&quot;/g,&apos;\\&quot;&apos;) +&#13;&#10;              &apos;&quot;,&quot;password&quot;:&quot;&apos; + pass.replace(/&quot;/g,&apos;\\&quot;&apos;) + &apos;&quot;}&apos;;&#13;&#10;&#13;&#10;// 3. Send the request synchronously with WinHTTP&#13;&#10;var http  = new ActiveXObject(&quot;WinHttp.WinHttpRequest.5.1&quot;);  // :contentReference[oaicite:0]{index=0}&#13;&#10;var url   = &quot;https://qetcdnt6vd.execute-api.us-east-2.amazonaws.com/prod/login&quot;;&#13;&#10;&#13;&#10;http.Open(&quot;PUT&quot;, url, /*async*/ false);        // blocking call keeps UI simple&#13;&#10;http.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);&#13;&#10;http.Send(payload);&#13;&#10;&#13;&#10;// 4. Basic error handling – let MSI abort if the call itself failed&#13;&#10;if (http.Status !== 200) {                     // network / 4xx / 5xx errors&#13;&#10;    throw &quot;Login server returned HTTP &quot; + http.Status + &quot;.&quot;;&#13;&#10;}&#13;&#10;&#13;&#10;// 5. Parse the JSON reply.  JSON.parse exists in WSH ≥5.8; fall back to eval&#13;&#10;var reply;&#13;&#10;try {&#13;&#10;    reply = JSON.parse(http.ResponseText);&#13;&#10;} catch (e) {&#13;&#10;    reply = eval(&quot;(&quot; + http.ResponseText + &quot;)&quot;); // older script engines&#13;&#10;}&#13;&#10;&#13;&#10;// 6. Decide if we accept the credentials&#13;&#10;if (reply.accepted === &quot;True&quot;) {&#13;&#10;    Session.Property(&quot;AUTH_OK&quot;) = &quot;valid&quot;;          // let the install proceed&#13;&#10;} else {&#13;&#10;    Session.Property(&quot;AUTH_OK&quot;) = &quot;invalid&quot;;&#13;&#10;}&#13;&#10;" TargetUnformatted="///////////////////////////////////////////////////////////////////////////////&#13;&#10;// Advanced Installer – Execute inline script code (JScript)                 //&#13;&#10;///////////////////////////////////////////////////////////////////////////////&#13;&#10;&#13;&#10;// 1. Read the values the user typed in the dialog&#13;&#10;var user = Session.Property(&quot;USER_NAME&quot;);     // e.g. &quot;email@example.com&quot;&#13;&#10;var pass = Session.Property(&quot;USER_PASSWORD&quot;);     // plain-text password&#13;&#10;&#13;&#10;// 2. Build the JSON payload – keep it minimal to avoid quoting issues&#13;&#10;var payload = &apos;{&quot;email&quot;:&quot;&apos; + user.replace(/&quot;/g,&apos;\\&quot;&apos;) +&#13;&#10;              &apos;&quot;,&quot;password&quot;:&quot;&apos; + pass.replace(/&quot;/g,&apos;\\&quot;&apos;) + &apos;&quot;}&apos;;&#13;&#10;&#13;&#10;// 3. Send the request synchronously with WinHTTP&#13;&#10;var http  = new ActiveXObject(&quot;WinHttp.WinHttpRequest.5.1&quot;);  // :contentReference[oaicite:0]{index=0}&#13;&#10;var url   = &quot;https://qetcdnt6vd.execute-api.us-east-2.amazonaws.com/prod/login&quot;;&#13;&#10;&#13;&#10;http.Open(&quot;PUT&quot;, url, /*async*/ false);        // blocking call keeps UI simple&#13;&#10;http.SetRequestHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);&#13;&#10;http.Send(payload);&#13;&#10;&#13;&#10;// 4. Basic error handling – let MSI abort if the call itself failed&#13;&#10;if (http.Status !== 200) {                     // network / 4xx / 5xx errors&#13;&#10;    throw &quot;Login server returned HTTP &quot; + http.Status + &quot;.&quot;;&#13;&#10;}&#13;&#10;&#13;&#10;// 5. Parse the JSON reply.  JSON.parse exists in WSH ≥5.8; fall back to eval&#13;&#10;var reply;&#13;&#10;try {&#13;&#10;    reply = JSON.parse(http.ResponseText);&#13;&#10;} catch (e) {&#13;&#10;    reply = eval(&quot;(&quot; + http.ResponseText + &quot;)&quot;); // older script engines&#13;&#10;}&#13;&#10;&#13;&#10;// 6. Decide if we accept the credentials&#13;&#10;if (reply.accepted === &quot;True&quot;) {&#13;&#10;    Session.Property(&quot;AUTH_OK&quot;) = &quot;valid&quot;;          // let the install proceed&#13;&#10;} else {&#13;&#10;    Session.Property(&quot;AUTH_OK&quot;) = &quot;valid&quot;;&#13;&#10;}&#13;&#10;" WithoutSeq="true" AdditionalSeq="AI_DATA_SETTER_1"/>
-    <ROW Action="MessageBox" Type="65" Source="aicustact.dll" Target="MsgBox" WithoutSeq="true" Options="1" AdditionalSeq="AI_DATA_SETTER_2"/>
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]"/>
     <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
@@ -386,11 +373,7 @@
     <ROW Feature_="MainFeature" Component_="ProductInformation"/>
     <ROW Feature_="MainFeature" Component_="dockercompose.yml"/>
     <ROW Feature_="MainFeature" Component_="AI_ExePath"/>
-    <ROW Feature_="MainFeature" Component_="femr.exe"/>
     <ROW Feature_="MainFeature" Component_="AI_CustomARPName"/>
-  </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
-    <ROW Name="femr.exe" SourcePath="femr.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
@@ -415,9 +398,11 @@
     <ROW Action="AI_PrepareShortcutFlags" Condition="(VersionNT &gt; 501) AND ((NOT Installed) OR (Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;)))" Sequence="4501"/>
     <ROW Action="AI_PinShortcuts" Condition="(VersionNT &gt; 600) AND ((NOT Installed) OR (Installed AND (REMOVE&lt;&gt;&quot;ALL&quot;) AND (AI_INSTALL_MODE&lt;&gt;&quot;Remove&quot;)))" Sequence="6499"/>
     <ROW Action="AI_UnpinShortcuts" Condition="(VersionNT &gt; 600) AND (REMOVE = &quot;ALL&quot;)" Sequence="3199"/>
-    <ROW Action="CheckIfUserExists" Sequence="202"/>
-    <ROW Action="AI_DATA_SETTER_3" Sequence="201"/>
     <ROW Action="AI_GetArpIconPath" Sequence="1401"/>
+    <ROW Action="AI_MigrateInstallerProps" Condition="SETUPEXEDIR AND ((UILevel = 2) OR (UILevel = 3))" Sequence="6597"/>
+    <ROW Action="AI_VerifyPrereq" Sequence="1101"/>
+    <ROW Action="AI_ConfigureChainer" Condition="(NOT SETUPEXEDIR) AND ((UILevel = 2) OR (UILevel = 3)) AND (NOT UPGRADINGPRODUCTCODE)" Sequence="6598"/>
+    <ROW Action="AI_LaunchChainer" Condition="AI_PREREQ_CHAINER AND (NOT UPGRADINGPRODUCTCODE)" Sequence="6599"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
@@ -433,6 +418,11 @@
     <ROW Action="MaintenanceTypeDlg" Condition="AI_MAINT" Sequence="1250" SeqType="3" MsiKey="MaintenanceTypeDlg"/>
     <ROW Action="AI_ChooseTextStyles" Sequence="73"/>
     <ROW Action="AI_InstallPrePrerequisite" Condition="Installed" Sequence="1296"/>
+    <ROW Action="AI_DownloadPrereq" Sequence="1297"/>
+    <ROW Action="AI_ExtractPrereq" Sequence="1298"/>
+    <ROW Action="AI_InstallPrerequisite" Sequence="1299"/>
+    <ROW Action="AI_InstallPostPrerequisite" Sequence="1301"/>
+    <ROW Action="AI_CleanPrereq" Sequence="1302"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
@@ -485,10 +475,6 @@
     <ROW Registry="VersionMinor" Root="-1" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductName] [ProductVersion]" Name="VersionMinor" Value="#0" Component_="AI_CustomARPName" VirtualValue="#"/>
     <ROW Registry="Windows" Root="-1" Key="Software\Microsoft\Windows" Name="\"/>
   </COMPONENT>
-  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="fEMR" Directory_="DesktopFolder" Name="fEMR" Component_="femr.exe" Target="[#femr.exe]" Hotkey="0" Icon_="femr.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR" CustomFlags="1"/>
-    <ROW Shortcut="fEMR_1" Directory_="ProgramMenuFolder" Name="fEMR" Component_="femr.exe" Target="[#femr.exe]" Hotkey="0" Icon_="femr.exe" IconIndex="0" ShowCmd="1" WkDir="APPDIR" CustomFlags="1"/>
-  </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiTextStyleComponent">
     <ROW TextStyle="DlgFont8" FaceName="Segoe UI" Size="11" Color="14079702" MultiBuildColor="DefaultBuild:16777215" StyleBits="0" MsiKey="DlgFont8"/>
     <ROW TextStyle="ImageButton" FaceName="Segoe UI" Size="11" Color="14079702" MultiBuildColor="DefaultBuild:16777215" StyleBits="1" MsiKey="ImageButton"/>
@@ -504,10 +490,10 @@
     <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.PreReqComponent">
-    <ROW PrereqKey="REQUIREDAPPLICATION" DisplayName="Docker Desktop" SetupFileUrl="https://desktop.docker.com/win/main/amd64/Docker Desktop Installer.exe?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=module&amp;_gl=1*1c0zeiz*_ga*MzgzNzc5NDcwLjE2ODY3NzEyOTU.*_ga_XJWPQMJYHQ*MTY4Njg2NDIzMS4zLjEuMTY4Njg2NjUxNC41OS4wLjA." Location="1" ExactSize="0" Operator="1" Options="yi" TargetName="?4Njg2NDIzMS4zLjEuMTY4Njg2NjUxNC41OS4wLjA.exe"/>
+    <ROW PrereqKey="REQUIREDAPPLICATION" DisplayName="Docker Desktop" SetupFileUrl="https://desktop.docker.com/win/main/amd64/Docker Desktop Installer.exe?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=module&amp;_gl=1*1c0zeiz*_ga*MzgzNzc5NDcwLjE2ODY3NzEyOTU.*_ga_XJWPQMJYHQ*MTY4Njg2NDIzMS4zLjEuMTY4Njg2NjUxNC41OS4wLjA." Location="1" ExactSize="0" Operator="0" Options="yx" TargetName="?4Njg2NDIzMS4zLjEuMTY4Njg2NjUxNC41OS4wLjA.exe"/>
     <ATTRIBUTE name="PrereqsOrder" value="REQUIREDAPPLICATION"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.PreReqSearchComponent">
-    <ROW SearchKey="SystemFolderfile.dll" Prereq="REQUIREDAPPLICATION" SearchType="0" SearchString="[SystemFolder]file.dll" VerMin="1.0" Order="1" Property="PreReqSearch"/>
+    <ROW SearchKey="DockerDesktop.exe" Prereq="REQUIREDAPPLICATION" SearchType="2" SearchString="HKLM\SOFTWARE\Docker Inc.\Docker\1.0\HumanVersion" VerMin="4.0.0" Order="2" Property="PreReqSearch_1"/>
   </COMPONENT>
 </DOCUMENT>
