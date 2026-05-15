@@ -14,7 +14,8 @@ d88P""  888        8888b   d8888 888   Y88b
 #To-do 5/13/2026:
 # need to adjust .aip to include docker compose overrides
 # check if working directory is set properly in .aip for github workflow
-
+Write-Host "Current working directory: $(Get-Location)"
+Write-Host "Script directory: $PSScriptRoot"
 
 # start Docker Desktop
 $dockerProcess = docker version --format '{{.Server.Version}}' 2>$null #check if running
@@ -32,6 +33,8 @@ if (-not $dockerProcess) {
         $attempt++
         Start-Sleep -Seconds 1
     }
+    Write-Host "Docker Desktop took too long; please try again after Docker Desktop opens..."
+    break
 } else {
     Write-Host "Docker Desktop is already running."
 }
@@ -46,10 +49,18 @@ if (docker volume ls -q -f name=femr-ext-volume ) {
     docker volume create femr-ext-volume
     Write-Host "Created new volume 'femr-ext-volume'."
 }
+
 Write-Host "============================="
 Write-Host "Starting fEMR..."
 Write-Host "Ctrl+C in this window to shutdown the fEMR server"
 Write-Host "============================="
+
+# load bundled docker images if there is no internet connection
+# docker will default to fetch images from dockerhub;
+
+# todo: GOING TO MAKE FEMR/femr BUNDLE IMAGES
+# installer to only use bundled images
+
 
 docker-compose up
 

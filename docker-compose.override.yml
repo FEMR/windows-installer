@@ -1,4 +1,4 @@
 services:
   femr:
     image: teamfemrdev/teamfemr:latest
-    build: null 
+    build: null #pull instead of building femr app image

@@ -1,8 +1,9 @@
-# This docker-compose.yml is for development purposes only such as creating a local AIP build during testing
+# This docker-compose.yml is for development purposes during development of the installer or creating a local AIP build during testing
 # Actual Github workflows directly uses FEMR/femr docker-compose.yml along with ./docker-compose.override.yml
 # KEEP THIS COMMENT!!!
 
-#copied from FEMR/femr/docker-compose.yml on 5/13/2025 wth adjustment to femr service image origin
+# copied from FEMR/femr/docker-compose.yml on 5/13/2025 wth adjustment to femr service image origin
+# or copy paste in latest .yml from FEMR/femr and update comment date
 version: "3"
 services:
 
@@ -48,7 +49,7 @@ services:
       - ./speedtest:/usr/src/speedtest
 
 
-#needs to be manually created; better to run .ps1 which inculdes complete installation script
+# volume need to be manually created; femr.ps1 includes creation
 volumes:
   db-data:
     external: true  
