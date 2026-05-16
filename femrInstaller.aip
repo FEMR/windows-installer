@@ -67,6 +67,7 @@
     <ROW File="speedtest.cpython312.pyc" Component_="speedtest.cpython312.pyc" FileName="SPEEDT~1.PYC|speedtest.cpython-312.pyc" Attributes="0" SourcePath="speedtest\__pycache__\speedtest.cpython-312.pyc" SelfReg="false"/>
     <ROW File="speedtest.cpython313.pyc" Component_="speedtest.cpython312.pyc" FileName="SPEEDT~2.PYC|speedtest.cpython-313.pyc" Attributes="0" SourcePath="speedtest\__pycache__\speedtest.cpython-313.pyc" SelfReg="false"/>
     <ROW File="speedtest.cpython36.pyc" Component_="speedtest.cpython312.pyc" FileName="SPEEDT~3.PYC|speedtest.cpython-36.pyc" Attributes="0" SourcePath="speedtest\__pycache__\speedtest.cpython-36.pyc" SelfReg="false"/>
+    <ROW File="dockercompose.override.yml" Component_="dockercompose.yml" FileName="DOCKER~2.YML|docker-compose.override.yml" Attributes="0" SourcePath="docker-compose.override.yml" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
