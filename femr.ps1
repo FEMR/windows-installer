@@ -10,11 +10,6 @@ d88P""  888        8888b   d8888 888   Y88b
 888    8888888888 888       888 888   T88b 
 "
 
-
-#To-do 5/13/2026:
-# need to adjust .aip to include docker compose overrides
-# check if working directory is set properly in .aip for github workflow
-
 Write-Host "Current working directory: $(Get-Location)"
 Write-Host "Script directory: $PSScriptRoot"
 
@@ -55,12 +50,24 @@ Write-Host "Starting fEMR..."
 Write-Host "Ctrl+C in this window to shutdown the fEMR server"
 Write-Host "============================="
 
-# load bundled docker images if there is no internet connection
-# docker will default to fetch images from dockerhub;
+# docker compose up doesn't fetch latest version on remote DockerHub
+# if internet connection exists, pull latest versions of images
+# load offline cache into Docker 
 
-# todo: GOING TO MAKE FEMR/femr BUNDLE IMAGES
-# installer to only use bundled images
+docker load -i .\femr-images.tar
+{
+    # check for internet connection, break if air-gapped
+    Invoke-WebRequest -Uri "https://registry-1.docker.io/v2/" -UseBasicParsing -TimeoutSec 5 -ErrorAction Break
+    
+    # fetch latest images on DockerHub
+    Write-Host "Internet connection detected, fetching latest images on DockerHub..."
+    docker compose pull
 
+    # modify offline cache of femr docker images
+    docker save -o femr-images-temp.tar $(docker compose config --images)
+    Remove-Item -Path "./femr-images.tar"
+    Rename-Item -Path "./femr-images-temp.tar" -NewName "./femr-images.tar"
+}
 
 docker-compose up
 
