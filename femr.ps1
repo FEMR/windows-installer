@@ -14,6 +14,7 @@ d88P""  888        8888b   d8888 888   Y88b
 #To-do 5/13/2026:
 # need to adjust .aip to include docker compose overrides
 # check if working directory is set properly in .aip for github workflow
+
 Write-Host "Current working directory: $(Get-Location)"
 Write-Host "Script directory: $PSScriptRoot"
 
@@ -39,9 +40,8 @@ if (-not $dockerProcess) {
     Write-Host "Docker Desktop is already running."
 }
 
-# check for existing femr-db-data volume (used to store volumes across containers for compatibility with app deployed 
-# from femr/femr as well as femr/windows-installer)
-# - required external volumes
+# check for existing femr-db-data volume (used to store volumes across compose stacks for compatibility with app deployed 
+# from femr/femr as well as femr/windows-installer through external volumes)
 
 if (docker volume ls -q -f name=femr-ext-volume ) {
     Write-Host "Volume 'femr-ext-volume' already exists."

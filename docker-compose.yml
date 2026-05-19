@@ -1,5 +1,5 @@
 # This docker-compose.yml is for development purposes during development of the installer or creating a local AIP build during testing
-# Actual Github workflows directly uses FEMR/femr docker-compose.yml along with ./docker-compose.override.yml
+# Actual Github workflows produce releases directly using FEMR/femr docker-compose.yml along with ./docker-compose.override.yml
 # KEEP THIS COMMENT!!!
 
 # copied from FEMR/femr/docker-compose.yml on 5/13/2025 wth adjustment to femr service image origin

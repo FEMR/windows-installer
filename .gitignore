@@ -1,3 +1,5 @@
 femrInstaller-cache/
 femrInstaller-SetupFiles/
 *.back*.aip
+docker-compose.yml 
+femr-images.tar
