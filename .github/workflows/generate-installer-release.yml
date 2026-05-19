@@ -1,0 +1,120 @@
+# docker-compose.yml in current repository is NOT to be modified directly
+# The ./docker-compose.yml is for development purposes during development of the installer or creating a local AIP build during testing
+# Actual Github workflows produce releases directly using FEMR/femr docker-compose.yml along with ./docker-compose.override.yml
+
+# workflow uses Github Action runner to checkout (pull from) FEMR/femr docker-compose.yml and generate installer with it
+# Produces an installer release directly based on FEMR/femr releases
+
+#to-do 5/17/26
+  # rework to use docker-compose.yml from source code of FEMR/femr
+
+name: Generate installer release
+on:
+  repository_dispatch:
+    types: [new-release-event]
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Release version"
+        required: true
+        default: "0.0.0"
+
+jobs:
+  fetch_artifact:
+    name: Download docker-compose.yml from femr/femr
+    runs-on: ubuntu-latest
+    outputs:
+      stripped_tag: ${{ steps.tag.outputs.stripped_tag }}
+      raw_tag: ${{ steps.tag.outputs.raw_tag }}
+
+    steps:
+      - name: Normalize version number # Or uses the input from workflow dispatch if not a release
+        id: tag
+        run: |
+          RAW_TAG="${{ github.event.client_payload.release }}"
+          if [ -z "$RAW_TAG" ]; then
+            RAW_TAG="${{ github.event.inputs.release }}"
+          fi
+          STRIPPED_TAG="${RAW_TAG#v}"
+          echo "raw_tag=$RAW_TAG" >> "$GITHUB_OUTPUT"
+          echo "stripped_tag=$STRIPPED_TAG" >> "$GITHUB_OUTPUT"
+      
+      - name: Checkout FEMR/femr
+        uses: actions/checkout@v4
+        with:
+          repository: FEMR/femr
+          path: femr-source
+          sparse-checkout: |
+            docker-compose.yml
+          sparse-checkout-cone-mode: false
+
+      - name: Copy docker-compose.yml into staging
+        run: |
+          run femr-source/docker-compose.yml ./staging/docker-compose.yml
+
+      - name: Checkout windows-installer repository into working directory
+        uses: actions/checkout@v4
+
+      - name: Set up staging
+        run: mv ./*.aip ./staging/
+             mv ./docker-compose.override.yml ./staging/
+
+      - name: Upload staging folder as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging
+          path: staging/
+          if-no-files-found: error
+  
+  bundle_docker_images:
+    runs-on: ubuntu-latest
+    name: Pulls docker images from DockerHub #in case of air gap during docker compose first run
+    needs: fetch_artifact
+    steps:
+      - name: Download artifacts folder
+        uses: actions/download-artifact@v4
+        with:
+          name: staging
+          path: staging/
+        
+      - name: Pull and bundle docker images
+        run: |
+          cd staging \
+          docker compose config -o femr-images $(docker compose config --images)
+
+      - name: Reupload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging
+          path: staging/
+          if-no-files-found: error
+          overwrite: true
+
+  build_aip:
+    runs-on: windows-latest
+    name: Build AIP into setup.exe file using official AIP CI/CD
+    needs: fetch_artifact
+    steps:
+      - name: Download staging folder as artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: staging
+          path: staging/
+      
+      - name: Build AIP (installer)
+        uses: caphyon/advinst-github-action@main
+        with: #the following must match config in .aip
+          advinst-license: ${{ secrets.ADVINST_LICENSE_KEY }}
+          advinst-enable-automation: 'true'
+          aip-path: ${{ github.workspace }}\staging\femrInstaller.aip
+          aip-build-name: DefaultBuild 
+          aip-package-name: femr_setup_${{ needs.fetch_artifact.outputs.stripped_tag }}.exe
+          aip-output-dir:  ${{ github.workspace }}\setup
+          aip-commands: |
+            SetVersion ${{ needs.fetch_artifact.outputs.stripped_tag }}
+      - name: Publish setup artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: setup
+          path: ${{ github.workspace }}\setup\femr_setup_${{ needs.fetch_artifact.outputs.stripped_tag }}.exe
+      
