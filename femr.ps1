@@ -13,36 +13,29 @@ d88P""  888        8888b   d8888 888   Y88b
 Write-Host "Current working directory: $(Get-Location)"
 Write-Host "Script directory: $PSScriptRoot"
 
-# start Docker Desktop
-$dockerProcess = docker version --format '{{.Server.Version}}' 2>$null #check if running
-if (-not $dockerProcess) {
-    #find docker desktop via windows registries
+# starting  Docker Desktop 
+# check if Docker Desktop is running
+$dockerProcess = docker version --format '{{.Server.Version}}' 2>$null 
+if (-not $dockerProcess) { #if not
+    # find docker desktop via Windows Registry
     $regPath = (Get-ItemProperty -Path "HKLM:\Software\Docker Inc.\Docker" -Name "InstallationDir" -ErrorAction SilentlyContinue).InstallationDir
     $dockerExe = if ($regPath) { "$regPath\Docker Desktop.exe" } else { "C:\Program Files\Docker\Docker\Docker Desktop.exe" }
 
     Write-Host "Starting Docker Desktop..."
     Start-Process $dockerExe
 
+    # polling on Docker Desktop with 60 tries
     $attempt = 0
     while ($attempt -lt 60) { #check if docker is ready
         if (docker ps 2>$null) { Write-Host "Docker Desktop up and running."; break }
         $attempt++
         Start-Sleep -Seconds 1
     }
-    Write-Host "Docker Desktop took too long; please try again after Docker Desktop opens..."
-    break
+    Write-Host "Docker Desktop took too long; please try again after Docker Desktop opens: Press Enter to exit..."
+    Read-Host
+    exit
 } else {
     Write-Host "Docker Desktop is already running."
-}
-
-# check for existing femr-db-data volume (used to store volumes across compose stacks for compatibility with app deployed 
-# from femr/femr as well as femr/windows-installer through external volumes)
-
-if (docker volume ls -q -f name=femr-ext-volume ) {
-    Write-Host "Volume 'femr-ext-volume' already exists."
-} else {
-    docker volume create femr-ext-volume
-    Write-Host "Created new volume 'femr-ext-volume'."
 }
 
 Write-Host "============================="
@@ -55,21 +48,29 @@ Write-Host "============================="
 # load offline cache into Docker 
 
 docker load -i .\femr-images.tar
-{
+try {
     # check for internet connection, break if air-gapped
-    Invoke-WebRequest -Uri "https://registry-1.docker.io/v2/" -UseBasicParsing -TimeoutSec 5 -ErrorAction Break
+    Invoke-WebRequest -Uri "https://registry-1.docker.io/v2/" -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
     
     # fetch latest images on DockerHub
     Write-Host "Internet connection detected, fetching latest images on DockerHub..."
     docker compose pull
 
     # modify offline cache of femr docker images
+    Write-Host "Updated offline cache of Docker images"
     docker save -o femr-images-temp.tar $(docker compose config --images)
     Remove-Item -Path "./femr-images.tar"
     Rename-Item -Path "./femr-images-temp.tar" -NewName "./femr-images.tar"
+    docker load -i ./femr-images.tar
+} catch {
+    Write-Host "No internet connection detected."
 }
 
 docker-compose up
 
 Write-Host "Successfully closed femr. Press Enter to exit..."
 Read-Host
+
+# To-do:
+    # script based backup for latest N backups etc 
+    # compression on backup volumes

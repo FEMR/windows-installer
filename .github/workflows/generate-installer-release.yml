@@ -5,9 +5,6 @@
 # workflow uses Github Action runner to checkout (pull from) FEMR/femr docker-compose.yml and generate installer with it
 # Produces an installer release directly based on FEMR/femr releases
 
-#to-do 5/17/26
-  # rework to use docker-compose.yml from source code of FEMR/femr
-
 name: Generate installer release
 on:
   repository_dispatch:
@@ -39,6 +36,9 @@ jobs:
           echo "raw_tag=$RAW_TAG" >> "$GITHUB_OUTPUT"
           echo "stripped_tag=$STRIPPED_TAG" >> "$GITHUB_OUTPUT"
       
+      - name: Checkout windows-installer repository into working directory
+        uses: actions/checkout@v4
+
       - name: Checkout FEMR/femr
         uses: actions/checkout@v4
         with:
@@ -48,16 +48,12 @@ jobs:
             docker-compose.yml
           sparse-checkout-cone-mode: false
 
-      - name: Copy docker-compose.yml into staging
-        run: |
-          run femr-source/docker-compose.yml ./staging/docker-compose.yml
-
-      - name: Checkout windows-installer repository into working directory
-        uses: actions/checkout@v4
-
       - name: Set up staging
-        run: mv ./*.aip ./staging/
-             mv ./docker-compose.override.yml ./staging/
+        run: | 
+          mkdir -p staging
+          cp ./femrInstaller.aip ./staging/femrInstaller.aip
+          cp ./docker-compose.override.yml ./staging/
+          cp femr-source/docker-compose.yml ./staging/docker-compose.yml
 
       - name: Upload staging folder as artifact
         uses: actions/upload-artifact@v4
@@ -79,8 +75,9 @@ jobs:
         
       - name: Pull and bundle docker images
         run: |
-          cd staging \
-          docker compose config -o femr-images $(docker compose config --images)
+          cd staging
+          docker compose pull 
+          docker save -o femr-images.tar $(docker compose config --images)
 
       - name: Reupload artifact
         uses: actions/upload-artifact@v4
@@ -90,10 +87,12 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-  build_aip:
+  build_installer_with_aip:
     runs-on: windows-latest
     name: Build AIP into setup.exe file using official AIP CI/CD
-    needs: fetch_artifact
+    needs: 
+      - fetch_artifact
+      - bundle_docker_images
     steps:
       - name: Download staging folder as artifact
         uses: actions/download-artifact@v4
@@ -113,8 +112,31 @@ jobs:
           aip-commands: |
             SetVersion ${{ needs.fetch_artifact.outputs.stripped_tag }}
       - name: Publish setup artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4
         with:
           name: setup
           path: ${{ github.workspace }}\setup\femr_setup_${{ needs.fetch_artifact.outputs.stripped_tag }}.exe
       
+  create_release:
+    runs-on: ubuntu-latest
+    name: Create installer release
+    needs:
+      - fetch_artifact
+      - build_installer_with_aip
+    permissions:
+      contents: write
+    steps:
+      - name: Download setup artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: setup
+          path: setup/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.fetch_artifact.outputs.stripped_tag }}
+          name: FEMR Windows Installer v${{ needs.fetch_artifact.outputs.stripped_tag }}
+          generate_release_notes: true
+          files: |
+            setup/femr_setup_${{ needs.fetch_artifact.outputs.stripped_tag }}.exe

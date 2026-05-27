@@ -3,8 +3,7 @@
 # KEEP THIS COMMENT!!!
 
 # copied from FEMR/femr/docker-compose.yml on 5/13/2025 wth adjustment to femr service image origin
-# or copy paste in latest .yml from FEMR/femr and update comment date
-version: "3"
+# or copy paste in latest .yml from FEMR/femr and update commented date
 services:
 
   db:
@@ -54,3 +53,5 @@ volumes:
   db-data:
     external: true  
     name: femr-ext-volume
+
+# reverse and undo the external volumes
