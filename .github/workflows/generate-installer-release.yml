@@ -54,9 +54,9 @@ jobs:
           mkdir -p staging
           cp ./femrInstaller.aip ./staging/
           cp ./docker-compose.override.yml ./staging/
-          cp ./femr.ps1 /staging/
-          cp ./README.html /staging/
-          cp ./FEMR_EULA.rtf /staging/
+          cp ./femr.ps1 ./staging/
+          cp ./README.html ./staging/
+          cp ./FEMR_EULA.rtf ./staging/
           cp femr-source/docker-compose.yml ./staging/docker-compose.yml
 
       - name: Upload staging folder as artifact
