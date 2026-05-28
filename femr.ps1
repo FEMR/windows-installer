@@ -31,6 +31,11 @@ if (-not $dockerProcess) { #if not
         $attempt++
         Start-Sleep -Seconds 1
     }
+
+    # needs a fix; docker ps is blocking wait
+    # timeout not triggered if docker daemon is hanging or unresponsive
+    # currently, aborting script is perfectly fine
+
     Write-Host "Docker Desktop took too long; please try again after Docker Desktop opens: Press Enter to exit..."
     Read-Host
     exit
@@ -38,33 +43,35 @@ if (-not $dockerProcess) { #if not
     Write-Host "Docker Desktop is already running."
 }
 
-Write-Host "============================="
-Write-Host "Starting fEMR..."
-Write-Host "Ctrl+C in this window to shutdown the fEMR server"
-Write-Host "============================="
-
 # docker compose up doesn't fetch latest version on remote DockerHub
 # if internet connection exists, pull latest versions of images
 # load offline cache into Docker 
 
-docker load -i .\femr-images.tar
 try {
     # check for internet connection, break if air-gapped
-    Invoke-WebRequest -Uri "https://registry-1.docker.io/v2/" -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
-    
+    Write-Host "Checking internet connection"
+    Invoke-WebRequest -Uri "https://hub.docker.com/v2/repositories/library/" -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop | Select-Object StatusCode, StatusDescription
+    # above method for checking internet connection fails
+
     # fetch latest images on DockerHub
     Write-Host "Internet connection detected, fetching latest images on DockerHub..."
     docker compose pull
 
     # modify offline cache of femr docker images
-    Write-Host "Updated offline cache of Docker images"
+    Write-Host "Updating offline cache of Docker images..."
     docker save -o femr-images-temp.tar $(docker compose config --images)
     Remove-Item -Path "./femr-images.tar"
     Rename-Item -Path "./femr-images-temp.tar" -NewName "./femr-images.tar"
-    docker load -i ./femr-images.tar
+    Write-Host "Updated offline cache."
 } catch {
-    Write-Host "No internet connection detected."
+    Write-Host "No internet connection detected. Loading offline image cache..."
+    docker load -i .\femr-images.tar
 }
+
+Write-Host "============================="
+Write-Host "Starting fEMR..."
+Write-Host "Ctrl+C in this window to shutdown the fEMR server"
+Write-Host "============================="
 
 docker-compose up
 
