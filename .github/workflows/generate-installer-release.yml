@@ -55,7 +55,6 @@ jobs:
           cp ./femrInstaller.aip ./staging/
           cp ./docker-compose.override.yml ./staging/
           cp ./femr.ps1 ./staging/
-          cp ./README.html ./staging/
           cp ./FEMR_EULA.rtf ./staging/
           cp ./femr.ico ./staging/
           cp femr-source/docker-compose.yml ./staging/docker-compose.yml
@@ -112,7 +111,7 @@ jobs:
           advinst-enable-automation: 'true'
           aip-path: ${{ github.workspace }}\staging\femrInstaller.aip
           aip-build-name: DefaultBuild 
-          aip-package-name: femr_setup_${{ needs.fetch_artifact.outputs.stripped_tag }}.exe
+          aip-package-name: setup\fEMR-${{ needs.fetch_artifact.outputs.stripped_tag }}-windows-x64-setup.exe
           aip-output-dir:  ${{ github.workspace }}\setup
           aip-commands: |
             SetVersion ${{ needs.fetch_artifact.outputs.stripped_tag }}
@@ -120,7 +119,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: setup
-          path: ${{ github.workspace }}\setup\femr_setup_${{ needs.fetch_artifact.outputs.stripped_tag }}.exe
+          path: ${{ github.workspace }}\setup\fEMR-${{ needs.fetch_artifact.outputs.stripped_tag }}-windows-x64-setup.exe
       
   create_release:
     runs-on: ubuntu-latest
