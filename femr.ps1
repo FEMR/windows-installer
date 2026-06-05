@@ -9,6 +9,7 @@ d88P""  888        8888b   d8888 888   Y88b
 888    888        888   ""   888 888  T88b  
 888    8888888888 888       888 888   T88b 
 "
+Set-Location $PSScriptRoot
 
 Write-Host "Current working directory: $(Get-Location)"
 Write-Host "Script directory: $PSScriptRoot"
