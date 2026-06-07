@@ -7,8 +7,12 @@
 
 name: Generate installer release
 on:
-  repository_dispatch:
-    types: [new-release-event]
+  # !!!: repository dispatch disabled just to keep code clean, manually create release by running this workflow.concurrency on Github
+  # - still builds using docker-compose.yml from femr/femr
+  
+  # UNCOMMENT BELOW TO RENABLE REPOSITORY DISPATCH TRIGGERS
+  # repository_dispatch:
+  #   types: [new-release-event]
   workflow_dispatch:
     inputs:
       release:
@@ -18,7 +22,7 @@ on:
 
 jobs:
   fetch_artifact:
-    name: Download docker-compose.yml from femr/femr
+    name: Create Staging
     runs-on: ubuntu-latest
     outputs:
       stripped_tag: ${{ steps.tag.outputs.stripped_tag }}
@@ -143,4 +147,5 @@ jobs:
           name: FEMR Windows Installer v${{ needs.fetch_artifact.outputs.stripped_tag }}
           generate_release_notes: true
           files: |
-            setup/femr_setup_${{ needs.fetch_artifact.outputs.stripped_tag }}.exe
+            setup\fEMR-${{ needs.fetch_artifact.outputs.stripped_tag }}-windows-x64-setup.exe
+          fail_on_unmatched_files: true
