@@ -6,39 +6,41 @@ This is the windows-installer for https://github.com/FEMR/femr. Installer releas
 
 ## For End Users
 
-[Releases](https://github.com/FEMR/windows-installer/releases) contain setup (.exe) files that when ran the fEMR application. The default installation path is 'C:/Program Files(x86)/Team FEMR/femr'.
+[Releases](https://github.com/FEMR/windows-installer/releases) contain setup (.exe) files that when ran will install the fEMR application. The default installation path is 'C:/Program Files(x86)/Team FEMR/femr'.
 
 **The installation process requires internet connection to ensure dependencies (i.e. Docker Desktop) are installed.**
-
 After the setup, running the application can be entirely offline. The app will auto-update itself if started in an online environment. 
-  
+
 
 ## For Developers
 
-As of 5/27/2026, installer releases are created through a manually triggered workflow that takes in \<version\> as input. The workflow pulls necessary files for creating an installer from FEMR/femr repository or builds them directly in the Github Runner with the exception of the following. These files are from the windows-installer repository and actively used in installer production.
+As of 5/27/2026, installer releases are created through a manually triggered workflow that takes in \<version\> as input. It can be run under Actions section. The workflow pulls necessary files for creating an installer from the current repository (FEMR/windows-installer) OR FEMR/femr repository OR builds them directly in the Github Runner. 
+
+<p>&nbsp;</p>
+
+The following files are from the windows-installer repository.
 
 - **femr.ps1**: the entry script to startup the fEMR application
 
 - **femrInstaller.aip**: Advanced Installer file to build the installer
 
-- **docker-compose.override.yml**: Since we pull docker-compose.yml directly from femr/femr into staging, we override the directive that builds the docker image and replace it with a DockerHub image.
+- **docker-compose.override.yml**: Since we pull docker-compose.yml directly from FEMR/femr into staging, we override the directive that builds the docker image and replace it with a DockerHub image.
 
 - **Misc. files**: miscellaneous files
 
-	> README.html, FEMR_EULA.rtf, femr.ico
+	> README.md, FEMR_EULA.rtf, femr.ico
 
-  
+	> Note: The docker-compose.yml in FEMR/windows-installer is only for installer development purposes.
 
 ### Other Files
 
-- **docker-compose.yml**: contains the compose stack
+- **docker-compose.yml**: the compose stack
 
-	> Github runner uses docker-compose.yml from femr/femr.
-		docker-compose.yml in current repository is for quick testing purposes.
+	> Installer production uses docker-compose.yml directly from FEMR/femr. <br> IMPORTANT: docker-compose.yml in current repository is for quick testing purposes.
 
-- **femr-images.tar**: contains an offline cache of docker images used by the application
+- **femr-images.tar**: an offline cache of docker images used by the application
 	> Docker Desktop does cache images on its own, but the offline cache handles the case when Docker never had an image pulled locally from DockerHub.
-	Also serves as emergency backup for remote fixes?
+	Also serves as emergency backup for remote fixes
   
 
 ## Installed Files And Folders
