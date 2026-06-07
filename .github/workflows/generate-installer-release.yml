@@ -22,7 +22,7 @@ on:
 
 jobs:
   fetch_artifact:
-    name: Create Staging
+    name: Create staging artifact
     runs-on: ubuntu-latest
     outputs:
       stripped_tag: ${{ steps.tag.outputs.stripped_tag }}
@@ -72,7 +72,7 @@ jobs:
   
   bundle_docker_images:
     runs-on: ubuntu-latest
-    name: Pulls docker images from DockerHub #in case of air gap during docker compose first run
+    name: Create docker images cache #in case of air gap during docker compose first run
     needs: fetch_artifact
     steps:
       - name: Download artifacts folder
@@ -115,15 +115,15 @@ jobs:
           advinst-enable-automation: 'true'
           aip-path: ${{ github.workspace }}\staging\femrInstaller.aip
           aip-build-name: DefaultBuild 
-          aip-package-name: setup\fEMR-${{ needs.fetch_artifact.outputs.stripped_tag }}-windows-x64-setup.exe
-          aip-output-dir:  ${{ github.workspace }}\setup
+          aip-package-name: fEMR-${{ needs.fetch_artifact.outputs.stripped_tag }}-windows-x64-setup.exe
+          aip-output-dir:  ${{ github.workspace }}\release-assets
           aip-commands: |
             SetVersion ${{ needs.fetch_artifact.outputs.stripped_tag }}
-      - name: Publish setup artifact
+      - name: Publish release-assets artifact
         uses: actions/upload-artifact@v4
         with:
-          name: setup
-          path: ${{ github.workspace }}\setup\fEMR-${{ needs.fetch_artifact.outputs.stripped_tag }}-windows-x64-setup.exe
+          name: release-assets
+          path: ${{ github.workspace }}\release-assets\fEMR-${{ needs.fetch_artifact.outputs.stripped_tag }}-windows-x64-setup.exe
       
   create_release:
     runs-on: ubuntu-latest
@@ -137,8 +137,17 @@ jobs:
       - name: Download setup artifact
         uses: actions/download-artifact@v4
         with:
-          name: setup
-          path: setup/
+          name: release-assets
+          path: release-assets/
+
+      - name : Verify artifacts and final files
+        run : |
+          echo "Current dir:"
+          pwd
+
+          echo "Files in dir:"
+          ls -R release-assets
+
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -147,5 +156,5 @@ jobs:
           name: FEMR Windows Installer v${{ needs.fetch_artifact.outputs.stripped_tag }}
           generate_release_notes: true
           files: |
-            setup\fEMR-${{ needs.fetch_artifact.outputs.stripped_tag }}-windows-x64-setup.exe
+            release-assets/fEMR-${{ needs.fetch_artifact.outputs.stripped_tag }}-windows-x64-setup.exe
           fail_on_unmatched_files: true
