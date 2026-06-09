@@ -17,9 +17,9 @@ Need an older version? Visit the [GitHub Releases](https://github.com/FEMR/windo
 The default installation path is `C:/Program Files/Team FEMR/femr`.
 After the setup, running the application is designed to be entirely offline. The application can be run through the Start Menu, Start Menu search bar, and desktop shortcuts. To update the app, simply run the app in an online environment. 
 
-<p>
-<u>New installer releases **DO NOT** need to be installed to get the latest fEMR app updates.</u> 
-</p>
+
+New installer releases **DO NOT** need to be installed to get the latest fEMR app updates. 
+
 <p>&nbsp;</p>
 
 
