@@ -3,6 +3,7 @@
 <img src="https://github.com/user-attachments/assets/dbad0bc5-3f97-4bfe-903b-90a47c045f91" width="60%"/>
 
 This is the windows-installer for https://github.com/FEMR/femr. Installer releases are intended to be consumer facing.
+___
 
 ## For End Users
 To install fEMR on Windows, go to the [Latest Installer Release](https://github.com/FEMR/windows-installer/releases/latest) page and download the `femr-xxx-setup.exe` file listed under **Assets**.
