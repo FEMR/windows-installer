@@ -5,18 +5,31 @@
 This is the windows-installer for https://github.com/FEMR/femr. Installer releases are intended to be consumer facing.
 
 ## For End Users
+To install fEMR on Windows, go to the [Latest Installer Release](https://github.com/FEMR/windows-installer/releases/latest) page and download the `femr-xxx-setup.exe` file listed under **Assets**.
 
-[Releases](https://github.com/FEMR/windows-installer/releases) contain setup (.exe) files that when ran will install the fEMR application. The default installation path is 'C:/Program Files(x86)/Team FEMR/femr'.
+Need an older version? Visit the [GitHub Releases](https://github.com/FEMR/windows-installer/releases) page.
+> An older version of the installer does not mean an older version of the fEMR app due to technicals.
 
-**The installation process requires internet connection to ensure dependencies (i.e. Docker Desktop) are installed.**
-After the setup, running the application can be entirely offline. The app will auto-update itself if started in an online environment. 
+<p>&nbsp;</p>
 
+**Initially, the setup process requires internet connection to ensure dependencies (i.e. Docker Desktop) are installed.**
+
+The default installation path is `C:/Program Files/Team FEMR/femr`.
+After the setup, running the application is designed to be entirely offline. The application can be run through the Start Menu, Start Menu search bar, and desktop shortcuts. To update the app, simply run the app in an online environment. 
+
+<p>
+<u>New installer releases **DO NOT** need to be installed to get the latest fEMR app updates.</u> 
+</p>
+<p>&nbsp;</p>
+
+
+
+___
 
 ## For Developers
 
 As of 5/27/2026, installer releases are created through a manually triggered workflow that takes in \<version\> as input. It can be run under Actions section. The workflow pulls necessary files for creating an installer from the current repository (FEMR/windows-installer) OR FEMR/femr repository OR builds them directly in the Github Runner. 
 
-<p>&nbsp;</p>
 
 The following files are from the windows-installer repository.
 
@@ -41,7 +54,8 @@ The following files are from the windows-installer repository.
 - **femr-images.tar**: an offline cache of docker images used by the application
 	> Docker Desktop does cache images on its own, but the offline cache handles the case when Docker never had an image pulled locally from DockerHub.
 	Also serves as emergency backup for remote fixes
-  
+
+<p>&nbsp;</p>
 
 ## Installed Files And Folders
 
